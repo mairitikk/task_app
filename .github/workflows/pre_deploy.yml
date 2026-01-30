@@ -1,0 +1,80 @@
+name: Pre Deploy Branch
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'frontend/**'
+      - 'back_end/index.mjs'
+      - 'back_end/.htaccess'
+      - 'back_end/package.json'
+      - 'back_end/src/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Prepare Deployment Artifact
+        run: |
+          mkdir pre_deploy_artifact
+          
+          # Copy Frontend Build
+          # -r is redundant for * but safe; cp -r frontend/dist/* handles files and folders including assets
+          cp -r frontend/dist/* pre_deploy_artifact/
+          
+          # Copy Frontend .htaccess
+          cp frontend/.htaccess pre_deploy_artifact/
+
+          # Copy Github Workflow so it is available in the pre_deploy branch
+          mkdir -p pre_deploy_artifact/.github/workflows
+          cp .github/workflows/manual_deploy.yml pre_deploy_artifact/.github/workflows/
+          
+          # Create Backend Directory
+          mkdir pre_deploy_artifact/back_end
+          
+          # Copy Backend Files
+          cp back_end/index.mjs pre_deploy_artifact/back_end/
+          cp back_end/.htaccess pre_deploy_artifact/back_end/
+          cp back_end/package.json pre_deploy_artifact/back_end/
+          cp back_end/reset-db.mjs pre_deploy_artifact/back_end/
+          cp -r back_end/src pre_deploy_artifact/back_end/
+          
+          # Verify structure (optional, for debugging mostly)
+          ls -R pre_deploy_artifact
+
+      - name: Deploy to pre_deploy branch
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd pre_deploy_artifact
+          git init
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git checkout -b pre_deploy
+          git add .
+          git commit -m "Pre-deploy update $(date -u)"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+          git push -f origin pre_deploy
+
+

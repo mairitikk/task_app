@@ -1,0 +1,81 @@
+name: Manual Deploy to Server (FTP)
+
+on:
+  workflow_dispatch:
+    inputs:
+      client_app:
+        description: 'Client App (e.g., justfly)'
+        required: true
+        type: string
+      client_name:
+        description: 'Client Name - admin (e.g., Max Grün)'
+        required: true
+        type: string
+      client_email:
+        description: 'Client Email - admin(e.g., maxgruen@justfly-tt.de)'
+        required: true
+        type: string
+      node_version:
+        description: 'Node Version (e.g., 24)'
+        required: true
+        type: string
+      target_path:
+        description: 'Target Path on Server (e.g., clients/)'
+        required: true
+        type: string
+      ftp_server:
+        description: 'FTP Server Host (e.g., ftp.trainingschedule.app)'
+        required: true
+        type: string
+      ftp_username:
+        description: 'FTP Username (e.g., developer@trainingschedule.app)'
+        required: true
+        type: string
+      ftp_password:
+        description: 'FTP Password'
+        required: true
+        type: string
+
+jobs:
+  deploy-to-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pre_deploy branch
+        uses: actions/checkout@v4
+        with:
+          ref: pre_deploy
+          fetch-depth: 0
+
+      - name: Replace Placeholders
+        run: |
+          echo "Replacing placeholders..."
+          
+          # Replace in back_end/.htaccess
+          sed -i "s|{CLIENT_APP}|${{ inputs.client_app }}|g" back_end/.htaccess
+          sed -i "s|{CLIENT_APP}|${{ inputs.client_app }}|g" back_end/src/controllers/users.controller.mjs
+          sed -i "s|{CLIENT_APP}|${{ inputs.client_name }}|g" back_end/src/models/settings.model.mjs
+          sed -i "s|{CLIENT_NAME}|${{ inputs.client_name }}|g" back_end/src/helpers/seed.mjs
+          sed -i "s|{CLIENT_NAME}|${{ inputs.client_name }}|g" back_end/src/models/settings.model.mjs
+          sed -i "s|{CLIENT_EMAIL}|${{ inputs.client_email }}|g" back_end/src/helpers/seed.mjs
+          sed -i "s|{NODE_VERSION}|${{ inputs.node_version }}|g" back_end/.htaccess
+          
+          # Replace in JS files inside assets folder
+          if [ -d "assets" ]; then
+            find assets -name "*.js" -type f -exec sed -i "s|{CLIENT_APP}|${{ inputs.client_app }}|g" {} +
+          else
+            echo "Warning: assets directory not found."
+          fi
+          
+          echo "Replacements done."
+
+      - name: FTP Upload
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ inputs.ftp_server }}
+          username: ${{ inputs.ftp_username }}
+          password: ${{ inputs.ftp_password }}
+          server-dir: ${{ inputs.target_path }}${{ inputs.client_app }}/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
