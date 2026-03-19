@@ -1,82 +1,115 @@
 .container {
-    display: grid;
-    place-items: center;
-    /* Center both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
+    padding: 1rem;
 }
 
-@media (max-width: 768px) {
-
-    /* Adjust breakpoint as needed */
-    .container {
-        display: flex;
-        flex-direction: column;
-        /* Align items to the end (right) */
-        align-items: flex-start;
-    }
-
-    .loginContainer {
-        width: 100%;
-       
-    }
-
-    .logTitel {
-        margin-left: 0;
-        text-align: center;
-        /* Align title to the right */
-    }
+.loginForm {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 8px 32px rgba(167, 16, 167, 0.15);
 }
-.logTitel{
-    margin-left: 0px;
+
+.logTitel {
     text-align: center;
+    color: #a710a7;
+    font-size: 1.75rem;
+    margin: 0 0 1.5rem;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .loginForm input {
     outline: none;
-    border: 1px solid #d9b6d9;
-    background: #f5e3f4;
-    border-radius: 2.25em;
-    padding: 1em 0.5em;
-    width: 80%;
-    color: #000000;
-    margin: 7px;
-    
+    border: 2px solid #e8d0e8;
+    background: #faf4fa;
+    border-radius: 0.75rem;
+    padding: 0.875rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    color: #333;
+    font-size: 1rem;
+    transition: border-color 0.2s;
 }
-.loginContainer {
-    text-align: center;
+
+.loginForm input:focus {
+    border-color: #a710a7;
+    background: #fff;
+}
+
+.loginForm input::placeholder {
+    color: #b88fb8;
+}
+
+.buttonContainer {
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
 .loginButton {
-    background:
-        #f5e3f4;
-    /* Light pink background */
-    border: 1px solid #d9b6d9;
-    /* Pink border */
-    color: #a710a7;
-    /* Pink text */
-    padding: 0.55em 0.5em;
-    border-radius: 1.25em;
+    width: 100%;
+    background: #a710a7;
+    border: none;
+    color: #fff;
+    padding: 0.875rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    outline: none;
-    width: 85%;
-    font-size: medium;
-    margin: 7px;
-    
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background 0.2s, transform 0.1s;
 }
 
-.link{
-    color: #a710a7;
+.loginButton:hover {
+    background: #8a0d8a;
 }
-.linkText{
-    color: #a710a7;
-   margin-bottom: 0;
 
+.loginButton:active {
+    transform: scale(0.98);
 }
-.errorMessage{
-    
-    color: #360436;
-        font-size: 14px;
-       
-       
+
+.linkText {
+    color: #666;
+    font-size: 0.875rem;
+    text-align: center;
+    margin: 1rem 0 0.25rem;
+}
+
+.link {
+    color: #a710a7;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.errorMessage {
+    color: #c0392b;
+    font-size: 0.8rem;
+    background: #fdeaea;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .loginForm {
+        padding: 2.5rem 2rem;
+    }
 }

@@ -1,40 +1,28 @@
 .logoutContainer {
     display: flex;
     justify-content: flex-end;
+    padding: 0;
 }
 
 .logoutButton {
-    font-family: 'Gloria Hallelujah', cursive;
-    background: #f5e3f4;
-    border: 1px solid #d9b6d9;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid #e8d0e8;
     color: #a710a7;
-    padding: 0.2em 0.1em;
-    /* Reduced padding further */
-    border-radius: 1.25em;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    outline: none;
-    font-size: smaller;
-    margin: 2px;
-    padding: 6px;
-    width: auto;
-    min-width: 30px;
-    /* Reduced min-width */
-    font-weight: bold;
-    /* Reduced font weight */
-    text-align: center;
-    /* Center text for better appearance */
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
 }
 
-@media (min-width: 768px) {
-    .logoutButton {
-        width: 10%;
-        /* Reduced width for larger screens */
-    }
+.logoutButton:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #a710a7;
 }
-@media (max-width: 767px) {
 
-    .logoutButton {
-            margin-right: 5px;
-            
-        }
-    }
+.logoutButton:active {
+    transform: scale(0.97);
+}

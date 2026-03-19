@@ -1,109 +1,96 @@
 .container {
   display: flex;
-  /* Change to flexbox for mobile */
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 1rem;
 }
 
-
+.logTitel {
+  text-align: center;
+  color: #a710a7;
+  font-size: 1.75rem;
+  margin: 0 0 1.5rem;
+}
 
 .registratonContainer {
-  max-width: 90%;
-  background-color: white;
-  padding: 20px;
-}
-
-@media (min-width: 768px) {
-  .registratonContainer {
-    max-width: 600px;
-  }
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(167, 16, 167, 0.15);
 }
 
 .formRow {
- 
-    
-    align-items: center;
-    /* Optional: Center inputs vertically */
-    margin-bottom: 1.5rem;
-    /* Add spacing between form rows */
-}
-
-@media (min-width: 768px) {
-  .formRow {
-    flex-direction: row;
-    align-items: center;
-  }
+  margin-bottom: 1.25rem;
 }
 
 .label {
-  width: fit-content;
-  font-size: large;
-}
-
-@media (min-width: 768px) {
-  .label {
-    margin-right: 10px;
-    text-align: right;
-    flex: 0 0 140px;
-  }
-}
-
-.registrationForm {
-  width: 80%;
-  outline: none;
-  border: 1px solid #d9b6d9;
-  background-color: #fff;
-  border-radius: 2.25em;
-  padding: 12px;
-  font-size: 16px;
+  display: block;
+  color: #a710a7;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.375rem;
 }
 
 .fieldContainer {
   position: relative;
 }
 
+.registrationForm {
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  border: 2px solid #e8d0e8;
+  background: #faf4fa;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.2s;
+}
+
+.registrationForm:focus {
+  border-color: #a710a7;
+  background: #fff;
+}
+
 .error {
-  color: #a710a7;
-  font-size: 12px;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 5px;
+  color: #c0392b;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.registrationButtonDirection {
+  margin-top: 1.5rem;
 }
 
 .registrationButton {
-  display: block;
-width: 88%;
-  background: #f5e3f4;
-  border: 1px solid #d9b6d9;
-  color: #a710a7;
-  padding: 10px 20px;
-  border-radius: 1.25em;
+  width: 100%;
+  background: #a710a7;
+  border: none;
+  color: #fff;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
   cursor: pointer;
-  outline: none;
-  font-size: 18px;
-  font-weight: bold;
-  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .registrationButton:hover {
-  background: #d9b6d9;
-  color: #a710a7;
+  background: #8a0d8a;
 }
-.registrationButtonDirection {
 
-  justify-content: flex-end;
-  /* Align elements to the right */
+.registrationButton:active {
+  transform: scale(0.98);
 }
-@media (max-width: 767px) {
 
-  /* Adjust breakpoint as needed */
-  .registrationButtonDirection {
-    display: flex;
-    justify-content: flex-start;
-    /* Align to the left */
-    margin-top: 15px;
-    /* Add some space above the button */
+@media (min-width: 768px) {
+  .registratonContainer {
+    padding: 2.5rem 2rem;
   }
 }
