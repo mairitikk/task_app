@@ -153,7 +153,7 @@ export default function App() {
     }
 
     return (
-        <div style={{ maxWidth: '600px', margin: '0 auto', padding: '1.5rem 1rem' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '1.5rem 1rem' }}>
             <LogoutComponent />
             <HomeComponent
                 todos={todos}

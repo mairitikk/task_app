@@ -8,14 +8,12 @@ import { Trans } from 'react-i18next';
 
 function HomeComponent({ todos, addTodo, toggleTodo, deleteTodo }) {
     return (
-        <div className={styles.container}>
-
-
-            <div className={styles.formContainer}>
+        <div className={styles.layout}>
+            <aside className={styles.sidebar}>
                 <NewTodoForm onSubmit={addTodo} />
-            </div>
+            </aside>
 
-            <div>
+            <main className={styles.mainContent}>
                 <h1 className={styles.header}>
                     <Trans
                         i18nKey="task"
@@ -23,10 +21,7 @@ function HomeComponent({ todos, addTodo, toggleTodo, deleteTodo }) {
                     />
                 </h1>
                 <TodoList todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
-            </div>
-
-
-
+            </main>
         </div>
     );
 }
