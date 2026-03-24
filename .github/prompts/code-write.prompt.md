@@ -37,4 +37,4 @@ Key aspects of my operating prompt include:
 
 Finally, remember! AESTHETICS ARE VERY IMPORTANT. All webapps should LOOK AMAZING and have GREAT FUNCTIONALITY!
 
-Do you understand?
+In the README.md you have the important information of the current project. You need to keep it up-to-date in any modifications so that other agents can review it later. 

@@ -1,40 +1,42 @@
 name: Manual Deploy to Server (FTP)
 
 on:
+  push:
+    branches:
+      - pre_deploy
   workflow_dispatch:
     inputs:
-      client_app:
-        description: 'Client App (e.g., justfly)'
-        required: true
+      target_path:
+        description: 'Target Path on Server (e.g., /)'
+        required: false
         type: string
-      client_name:
-        description: 'Client Name - admin (e.g., Max Grün)'
-        required: true
-        type: string
-      client_email:
-        description: 'Client Email - admin(e.g., maxgruen@justfly-tt.de)'
-        required: true
-        type: string
+        default: '/task/'
       node_version:
         description: 'Node Version (e.g., 24)'
         required: true
-        type: string
-      target_path:
-        description: 'Target Path on Server (e.g., clients/)'
-        required: true
-        type: string
+        type: string        
+        default: '24'
       ftp_server:
-        description: 'FTP Server Host (e.g., ftp.trainingschedule.app)'
-        required: true
+        description: 'FTP Server Host (e.g., ftp.drimt.co)'
+        required: false
         type: string
+        default: 'ftp.drimt.co'
       ftp_username:
-        description: 'FTP Username (e.g., developer@trainingschedule.app)'
-        required: true
+        description: 'FTP Username (e.g., developer@drimt.co)'
+        required: false
         type: string
+        default: 'developer@drimt.co'
       ftp_password:
         description: 'FTP Password'
-        required: true
-        type: string
+        required: false
+        type: string 
+        default: 'HTQ+ev+RCvF)'
+
+env:
+  TARGET_PATH: ${{ inputs.target_path || '/task/' }}
+  FTP_SERVER: ${{ inputs.ftp_server || 'ftp.drimt.co' }}
+  FTP_USERNAME: ${{ inputs.ftp_username || 'developer@drimt.co' }}
+  FTP_PASSWORD: ${{ inputs.ftp_password || 'HTQ+ev+RCvF)' }}
 
 jobs:
   deploy-to-server:
@@ -51,22 +53,7 @@ jobs:
           echo "Replacing placeholders..."
           
           # Replace in back_end/.htaccess
-          sed -i "s|{CLIENT_APP}|${{ inputs.client_app }}|g" back_end/.htaccess
-          sed -i "s|{CLIENT_APP}|${{ inputs.client_app }}|g" back_end/src/controllers/users.controller.mjs
-          sed -i "s|{CLIENT_APP}|${{ inputs.client_name }}|g" back_end/src/models/settings.model.mjs
-          sed -i "s|{CLIENT_NAME}|${{ inputs.client_name }}|g" back_end/src/helpers/seed.mjs
-          sed -i "s|{CLIENT_NAME}|${{ inputs.client_name }}|g" back_end/src/models/settings.model.mjs
-          sed -i "s|{CLIENT_EMAIL}|${{ inputs.client_email }}|g" back_end/src/helpers/seed.mjs
           sed -i "s|{NODE_VERSION}|${{ inputs.node_version }}|g" back_end/.htaccess
-          
-          # Replace in JS files inside assets folder
-          if [ -d "assets" ]; then
-            find assets -name "*.js" -type f -exec sed -i "s|{CLIENT_APP}|${{ inputs.client_app }}|g" {} +
-          else
-            echo "Warning: assets directory not found."
-          fi
-          
-          echo "Replacements done."
 
       - name: FTP Upload
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -74,8 +61,9 @@ jobs:
           server: ${{ inputs.ftp_server }}
           username: ${{ inputs.ftp_username }}
           password: ${{ inputs.ftp_password }}
-          server-dir: ${{ inputs.target_path }}${{ inputs.client_app }}/
+          server-dir: ${{ inputs.target_path }}
           exclude: |
             **/.git*
             **/.git*/**
             .github/**
+

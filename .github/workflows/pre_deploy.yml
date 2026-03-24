@@ -5,7 +5,7 @@ on:
     branches:
       - develop
     paths:
-      - 'frontend/**'
+      - 'front_end/**'
       - 'back_end/index.mjs'
       - 'back_end/.htaccess'
       - 'back_end/package.json'
@@ -22,45 +22,56 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # ----------------------------------------------------------------
+      # front_end BUILD
+      # ----------------------------------------------------------------
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install Frontend Dependencies
-        working-directory: ./frontend
+      - name: Install front_end Dependencies
+        working-directory: ./front_end
         run: npm ci
 
-      - name: Build Frontend
-        working-directory: ./frontend
+      - name: Build front_end
+        working-directory: ./front_end
         run: npm run build
 
+      # ----------------------------------------------------------------
+      # BACKEND PREP
+      # ----------------------------------------------------------------
+
+      # ----------------------------------------------------------------
+      # ARTIFACT ASSEMBLY
+      # ----------------------------------------------------------------
       - name: Prepare Deployment Artifact
         run: |
           mkdir pre_deploy_artifact
           
-          # Copy Frontend Build
-          # -r is redundant for * but safe; cp -r frontend/dist/* handles files and folders including assets
-          cp -r frontend/dist/* pre_deploy_artifact/
-          
-          # Copy Frontend .htaccess
-          cp frontend/.htaccess pre_deploy_artifact/
+          echo "Copying front_end..."
+          # Copy front_end Build to root
+          cp -r front_end/dist/* pre_deploy_artifact/
+          cp front_end/.htaccess pre_deploy_artifact/
 
           # Copy Github Workflow so it is available in the pre_deploy branch
           mkdir -p pre_deploy_artifact/.github/workflows
           cp .github/workflows/manual_deploy.yml pre_deploy_artifact/.github/workflows/
-          
+
           # Create Backend Directory
           mkdir pre_deploy_artifact/back_end
           
           # Copy Backend Files
-          cp back_end/index.mjs pre_deploy_artifact/back_end/
+          cp back_end/index.js pre_deploy_artifact/back_end/
           cp back_end/.htaccess pre_deploy_artifact/back_end/
           cp back_end/package.json pre_deploy_artifact/back_end/
-          cp back_end/reset-db.mjs pre_deploy_artifact/back_end/
+          //cp back_end/db-reset.mjs pre_deploy_artifact/back_end/
+          
+         //cp back_end/db-sync.mjs pre_deploy_artifact/back_end/
           cp -r back_end/src pre_deploy_artifact/back_end/
           
-          # Verify structure (optional, for debugging mostly)
+          # Verify structure
+          echo "Listing Artifact Structure:"
           ls -R pre_deploy_artifact
 
       - name: Deploy to pre_deploy branch
@@ -74,6 +85,7 @@ jobs:
           git checkout -b pre_deploy
           git add .
           git commit -m "Pre-deploy update $(date -u)"
+          # Push to the same repo
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
           git push -f origin pre_deploy
 
