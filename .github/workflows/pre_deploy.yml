@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Install front_end Dependencies
         working-directory: ./front_end
@@ -65,9 +65,8 @@ jobs:
           cp back_end/index.js pre_deploy_artifact/back_end/
           cp back_end/.htaccess pre_deploy_artifact/back_end/
           cp back_end/package.json pre_deploy_artifact/back_end/
-          //cp back_end/db-reset.mjs pre_deploy_artifact/back_end/
-          
-         //cp back_end/db-sync.mjs pre_deploy_artifact/back_end/
+          # cp back_end/db-reset.mjs pre_deploy_artifact/back_end/
+          # cp back_end/db-sync.mjs pre_deploy_artifact/back_end/
           cp -r back_end/src pre_deploy_artifact/back_end/
           
           # Verify structure
