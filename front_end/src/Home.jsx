@@ -4,7 +4,7 @@ import HomeComponent from './HomeComponent';
 import LogoutComponent from './LogoutComponent';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 
-const API_URL = (import.meta.env.MODE === 'development') ? 'http://localhost:3000/api/' : 'https://task.drimt.co/back_end/api';
+const API_URL = (import.meta.env.MODE === 'development') ? 'http://localhost:3000/api/' : 'https://task.drimt.co/back_end/api/';
 
 
 async function fetchTodos(token) {

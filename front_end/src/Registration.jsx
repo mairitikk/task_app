@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from './styles/RegistrationComponent.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-const API_URL = (import.meta.env.MODE === 'development') ? 'http://localhost:3000/api/' : 'https://task.drimt.co/back_end/api';
+const API_URL = (import.meta.env.MODE === 'development') ? 'http://localhost:3000/api/' : 'https://task.drimt.co/back_end/api/';
 
 function RegistrationForm() {
   const { t } = useTranslation();
