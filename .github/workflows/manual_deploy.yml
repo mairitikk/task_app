@@ -1,0 +1,69 @@
+name: Manual Deploy to Server (FTP)
+
+on:
+  push:
+    branches:
+      - pre_deploy
+  workflow_dispatch:
+    inputs:
+      target_path:
+        description: 'Target Path on Server (e.g., /)'
+        required: false
+        type: string
+        default: '/task/'
+      node_version:
+        description: 'Node Version (e.g., 24)'
+        required: true
+        type: string        
+        default: '24'
+      ftp_server:
+        description: 'FTP Server Host (e.g., ftp.drimt.co)'
+        required: false
+        type: string
+        default: 'ftp.drimt.co'
+      ftp_username:
+        description: 'FTP Username (e.g., developer@drimt.co)'
+        required: false
+        type: string
+        default: 'developer@drimt.co'
+      ftp_password:
+        description: 'FTP Password'
+        required: false
+        type: string 
+        default: 'HTQ+ev+RCvF)'
+
+env:
+  TARGET_PATH: ${{ inputs.target_path || '/task/' }}
+  FTP_SERVER: ${{ inputs.ftp_server || 'ftp.drimt.co' }}
+  FTP_USERNAME: ${{ inputs.ftp_username || 'developer@drimt.co' }}
+  FTP_PASSWORD: ${{ inputs.ftp_password || 'HTQ+ev+RCvF)' }}
+
+jobs:
+  deploy-to-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pre_deploy branch
+        uses: actions/checkout@v4
+        with:
+          ref: pre_deploy
+          fetch-depth: 0
+
+      - name: Replace Placeholders
+        run: |
+          echo "Replacing placeholders..."
+          
+          # Replace in back_end/.htaccess
+          sed -i "s|{NODE_VERSION}|${{ inputs.node_version }}|g" back_end/.htaccess
+
+      - name: FTP Upload
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ inputs.ftp_server }}
+          username: ${{ inputs.ftp_username }}
+          password: ${{ inputs.ftp_password }}
+          server-dir: ${{ inputs.target_path }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+
