@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './styles/RegistrationComponent.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+const API_URL = (import.meta.env.MODE === 'development') ? 'http://localhost:3000/api/' : 'https://task.drimt.co/back_end/api';
 
 function RegistrationForm() {
   const { t } = useTranslation();
@@ -58,7 +59,7 @@ function RegistrationForm() {
     const isValid = validateForm();
     if (isValid) {
       try {
-        const response = await fetch('http://localhost:3000/api/user/register', {
+        const response = await fetch(`${API_URL}user/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

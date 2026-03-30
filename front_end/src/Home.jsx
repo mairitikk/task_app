@@ -4,9 +4,12 @@ import HomeComponent from './HomeComponent';
 import LogoutComponent from './LogoutComponent';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 
+const API_URL = (import.meta.env.MODE === 'development') ? 'http://localhost:3000/api/' : 'https://task.drimt.co/back_end/api';
+
+
 async function fetchTodos(token) {
     try {
-        const response = await fetch('http://localhost:3000/api/todo/', {
+        const response = await fetch(`${API_URL}todo/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -47,7 +50,7 @@ export default function App() {
                 return navigate('/');
             };
 
-            const response = await fetch('http://localhost:3000/api/todo/', {
+            const response = await fetch(`${API_URL}todo/`,  {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,7 +79,7 @@ export default function App() {
                 return navigate('/');
             }
 
-            const response = await fetch(`http://localhost:3000/api/todo/${id}`, {
+            const response = await fetch(`${API_URL}todo/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +106,7 @@ export default function App() {
         }
         try {
             const userId = localStorage.getItem('userId');
-            const response = await fetch(`http://localhost:3000/api/todo/${id}`, {
+            const response = await fetch(`${API_URL}todo/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
+const API_URL = (import.meta.env.MODE === 'development') ? 'http://localhost:3000/api/' : 'https://task.drimt.co/back_end/api';
+
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -45,7 +47,7 @@ export default function Login() {
         // Proceed with login if all fields are valid
         try {
             const bodyData = { email: email, password: password };
-            const response = await fetch('http://localhost:3000/api/user/login/', {
+            const response = await fetch(`${API_URL}user/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
